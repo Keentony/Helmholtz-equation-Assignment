@@ -5,28 +5,27 @@ Ul = 0;
 A = 1;
 L = 1;
 v = 1;
-k = 1;
+k = 10;
 N = 10;
 h = (L/(N+1));
-x = 0:h:L;
 
-syms u(x) f(x)
-u(x) = (1-((sinh(k*(L-x))+sinh(k*x))/sinh(k*L)))*(A/k^2)+Uo*(sinh(k*(L-x))/sinh(k*L));
-f(x) = diff(u,x,2)-k^2*(u(x));
-fplot(u,[0 1])
+% syms u(x) f(x)
+% u(x) = (((sinh(k*(L-x))+sinh(k*x))/sinh(k*L))-1)*(A/k^2)+Uo*(sinh(k*(L-x))/sinh(k*L));
+% f(x) = diff(u,x,2)-k^2*(u(x));
+% fplot(u,[0 1])
 
-
-a(1) = 2-((-k^2)*h^2);
-a = a(1)*ones(N);
+a(1) = -2+(k^2*h^2);
+a = a(1)*ones(1,N);
 g(1) = h^2*A-Uo;
-g = h^2*A*ones(N);
-b = ones(N);
-c = ones(N-1);
+g = h^2*A*ones(1,N);
+b = ones(1,N);
+c = ones(1,N-1);
 
 for j = 2:N
     a(j) = a(j)-(b(j)/a(j-1))*c(j-1);
     g(j) = g(j)-(b(j)/a(j-1))*g(j-1);
 end
+
 u = zeros(N:1);
 u(N) = g(N)/a(N);
 
@@ -34,8 +33,16 @@ for k = 1:N-1
     u(N-k) = (g(N-k)-c(N-k)*u(N-k+1))/a(N-k);
 end
 
-ua = zeros(N:1);
+x = zeros(N:1);
 for j = 1:N
-    ua(j) = (1-((sinh(k*(L-h*j))+sinh(k*h*j))/sinh(k*L)))*(A/k^2)+Uo*(sinh(k*(L-h*j))/sinh(k*L));
+    x(j) = j*h;
 end
 
+ua = zeros(N:1);
+for j = 1:N
+    ua(j) = (((sinh(k*(L-h*j))+sinh(k*h*j))/sinh(k*L))-1)*(A/k^2)+Uo*(sinh(k*(L-h*j))/sinh(k*L));
+end
+
+plot(x,u)
+hold on
+plot(x,ua)
