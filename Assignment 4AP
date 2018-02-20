@@ -14,31 +14,31 @@ h = (L/(N+1));
 % f(x) = diff(u,x,2)-k^2*(u(x));
 % fplot(u,[0 1])
 
-a(1) = -2+(k^2*h^2);
+a(1) = -(2+(k*h)^2);
 a = a(1)*ones(1,N);
-g(1) = h^2*A-Uo;
 g = h^2*A*ones(1,N);
+g(1) = h^2*A-Uo;
 b = ones(1,N);
 c = ones(1,N-1);
 
 for j = 2:N
-    a(j) = a(j)-(b(j)/a(j-1))*c(j-1);
-    g(j) = g(j)-(b(j)/a(j-1))*g(j-1);
+    a(j) = a(j)-((b(j)/a(j-1))*c(j-1));
+    g(j) = g(j)-((b(j)/a(j-1))*g(j-1));
 end
 
-u = zeros(N:1);
+u = zeros(1,N);
 u(N) = g(N)/a(N);
 
 for k = 1:N-1
     u(N-k) = (g(N-k)-c(N-k)*u(N-k+1))/a(N-k);
 end
 
-x = zeros(N:1);
+x = zeros(1,N);
 for j = 1:N
     x(j) = j*h;
 end
 
-ua = zeros(N:1);
+ua = zeros(1,N);
 for j = 1:N
     ua(j) = (((sinh(k*(L-h*j))+sinh(k*h*j))/sinh(k*L))-1)*(A/k^2)+Uo*(sinh(k*(L-h*j))/sinh(k*L));
 end
@@ -46,3 +46,6 @@ end
 plot(x,u)
 hold on
 plot(x,ua)
+
+
+
