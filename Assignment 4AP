@@ -5,32 +5,34 @@ Ul = 0;
 A = 1;
 L = 1;
 v = 1;
-k = 1;
+k = 10;
 N = 10;
-h = (L/(N+1))
-x = 0:N:L;
+h = (L/(N+1));
+x = 0:h:L;
 
-syms u(x) a(x) g(x)
-u(x) = (1-(sinh(k*(L-x))+sinh(k*x)/sinh(k*L)))*(A/k^2)+Uo*(sinh(k*(L-x))/sinh(k*L));
+syms u(x) f(x)
+u(x) = (1-((sinh(k*(L-x))+sinh(k*x))/sinh(k*L)))*(A/k^2)+Uo*(sinh(k*(L-x))/sinh(k*L));
 f(x) = diff(u,x,2)-k^2*(u(x));
+fplot(u,[0 1])
 
-a(x) = 2-((-k^2)*h^2);
-g(x) = h^2*f(x)*Uo;
 
+a(1) = 2-((-k^2)*h^2);
+a = a1*ones(N);
+g(1) = h^2*A-Uo;
+g = h^2*A*ones(N);
+b = ones(N);
+c = ones(N-1);
 
 for j = 2:N
-    b = zeros(N);
-    c = zeros(N-1);
     a(j) = a(j)-(b(j)/a(j-1))*c(j-1);
-    g(j) = f(j)-(b(j)/a(j-1))*g(j-1);
+    g(j) = g(j)-(b(j)/a(j-1))*g(j-1);
 end
-
+u = zeros(N);
 u(N) = g(N)/a(N);
 
 for k = 1:N-1
     u(N-k) = (g(N-k)-c(N-k)*u(N-k+1))/a(N-k);
 end
 
-u3 = g(3)/a(3)
-u2 = (g(2)-c(2)*u3)/a(2)
-u1 = (g1-c(1)*u2)/a1
+
+
