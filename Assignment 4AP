@@ -1,3 +1,5 @@
+
+
 clear, clc
 
 Uo = 1;
@@ -5,15 +7,13 @@ Ul = 0;
 A = 1;
 L = 1;
 v = 1;
-k = 10;
-N = 10;
+k = 100;
+N = 60;
 h = (L/(N+1));
 
-% syms u(x) f(x)
-% u(x) = (((sinh(k*(L-x))+sinh(k*x))/sinh(k*L))-1)*(A/k^2)+Uo*(sinh(k*(L-x))/sinh(k*L));
-% f(x) = diff(u,x,2)-k^2*(u(x));
-% fplot(u,[0 1])
-
+%Naming and giving values to the coefficients of a's b's and c's
+%a(1) and g(1) are the two initial values that differ from the other
+%coefficients 
 a(1) = -(2+(k*h)^2);
 a = a(1)*ones(1,N);
 g = h^2*A*ones(1,N);
@@ -21,18 +21,21 @@ g(1) = h^2*A-Uo;
 b = ones(1,N);
 c = ones(1,N-1);
 
+%Using a pseudo code to create a linearization of the tri diagonal matrix
 for j = 2:N
     a(j) = a(j)-((b(j)/a(j-1))*c(j-1));
     g(j) = g(j)-((b(j)/a(j-1))*g(j-1));
 end
 
+%Defining the nth terms of the linearized equations
 u = zeros(1,N);
 u(N) = g(N)/a(N);
 
+%Evaluating the u values begining from N-1 all the way back to 1
 for k = 1:N-1
     u(N-k) = (g(N-k)-c(N-k)*u(N-k+1))/a(N-k);
 end
-
+%Setting up the analytical values of u
 x = zeros(1,N);
 for j = 1:N
     x(j) = j*h;
@@ -43,9 +46,28 @@ for j = 1:N
     ua(j) = (((sinh(k*(L-h*j))+sinh(k*h*j))/sinh(k*L))-1)*(A/k^2)+Uo*(sinh(k*(L-h*j))/sinh(k*L));
 end
 
-plot(x,u)
+plot(x,u) 
 hold on
-plot(x,ua)
+plot(x,ua) 
+title('K=100 N= 10')
+legend('Approx.','Analytical')
 
+% finding the maximum absolute error between the approximation and
+% analytical values of u
+E = (abs(ua-u));
 
+Emax = max(E)
 
+%Used a value of k =100 and manually changed the N and 2N values to
+%calculate accuracy using the log mehtod 
+AN = 0.1560;
+A2N = 0.0733;
+
+BN =.1091;
+B2N = .1259;
+
+Acc1 = (log(AN/A2N)/log(2));
+Acc2 = (log(BN/B2N)/log(2));
+
+Acc60to120 = 1.0897;
+Acc70to140 = -0.2066;
